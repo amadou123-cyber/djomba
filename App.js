@@ -1,20 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
 
+import { NavigationContainer } from '@react-navigation/native';
+import {View, StyleSheet, Text, AppState} from 'react-native';
+ 
+import MyStack from './navigation_tinder';
+import LoginProvider from './context/loginprovider';
+import { useState } from 'react';
+import { useEffect } from 'react';
+ 
 export default function App() {
+ 
+   
+  useEffect(() => {
+    const appStateListener = AppState.addEventListener(
+      'change',
+      nextAppState => {
+        if (nextAppState==='active') {
+          console.log('I am online.')
+        } 
+        else {
+          console.log('I am not online.')
+        }
+         
+      },
+    );
+    return () => {
+      appStateListener?.remove();
+    };
+  }, []);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <LoginProvider> 
+    < NavigationContainer>
+      <MyStack />
+
+    </NavigationContainer>
+    </LoginProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+ 
