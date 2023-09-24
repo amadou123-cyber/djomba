@@ -23,7 +23,7 @@ export default Search = () => {
   const [matrimonial, setMatrimonial] = useState('');
   const [teint, setTeint] = useState('')
   const [canLoad, setCanLoad] = useState(false);
-  const [level, setLevel] = useState('')
+ 
   const [loading, setLoading] = useState(false)
   const [height, setHeight] = useState('')
   const [ethnie, setEthnie] = useState('')
@@ -33,7 +33,7 @@ export default Search = () => {
   const [has_search, sethas_search] = useState(false)
   const [datas, setDatas] = useState([])
   const loadsearch = () => {
-    const search_url = `https://meubious.com/api/search-dating/?country=${pays}&religion=${religion}&situation_matrimoniale=${matrimonial}&taille=${height}&teint=${teint}&ethnie=${ethnie}&niveau=${level}&min_age=${age_from}&max_age=${age_to}&online=${online ? 1 : 0}&page=${currentPage}`;
+    const search_url = `https://meubious.com/api/search-dating/?country=${pays}&religion=${religion}&situation_matrimoniale=${matrimonial}&taille=${height}&teint=${teint}&ethnie=${ethnie}&min_age=${age_from}&max_age=${age_to}&online=${online ? 1 : 0}&page=${currentPage}`;
 
     setSearch(true); setLoading(true);
 
@@ -368,67 +368,7 @@ export default Search = () => {
         rowTextStyle={styles.dropdown1RowTxtStyle}
 
       />
-      <SelectDropdown
-        data={[
-          ("Primaire", "Primaire"),
-          ("Collège", "Collège"),
-          ("Lycée", "Lycée"),
-          ("Licence", "Licence"),
-          ("Master", "Master"),
-          ("Doctorat", "Doctorat"),
-          ("Postdoctoral", "Postdoctoral")
-        ]}
-        onSelect={(selectedItem, index) => {
-
-          setLevel(selectedItem);
-
-        }}
-
-        defaultValue={level}
-
-
-        buttonTextAfterSelection={(selectedItem, index) => {
-
-
-          return selectedItem;
-        }}
-        rowTextForSelection={(item, index) => {
-          return item;
-        }}
-        renderCustomizedButtonChild={(selectedItem, index) => {
-          return (
-            <View style={{
-              flex: 1,
-              flexDirection: 'row',
-
-              alignItems: 'center',
-            }}>
-
-              <Icon name="school" color={'#444'} size={18} />
-
-
-              <Text style={{
-                textAlign: 'center',
-                fontSize: 20,
-
-                marginHorizontal: 5,
-              }} >{selectedItem ? selectedItem : "Niveau d'etudes"}</Text>
-
-            </View>
-          );
-        }}
-
-        buttonStyle={styles.dropdown1BtnStyle}
-        buttonTextStyle={styles.dropdown1BtnTxtStyle}
-        renderDropdownIcon={isOpened => {
-          return <Icon type='font-awesome' name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={15} />;
-        }}
-        dropdownIconPosition={'right'}
-        dropdownStyle={styles.dropdown1DropdownStyle}
-        rowStyle={styles.dropdown1RowStyle}
-        rowTextStyle={styles.dropdown1RowTxtStyle}
-
-      />
+       
 
       <SelectDropdown
         data={[
