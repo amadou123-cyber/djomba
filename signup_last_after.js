@@ -1,46 +1,39 @@
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 /* eslint-disable no-undef */
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, ScrollView, Image, Dimensions, TouchableOpacity, TextInput, Modal, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
-import { Text, Input, Icon, Button } from '@rneui/themed';
-import { useLogin } from './context/loginprovider';
+import React, { useState } from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { Text, Icon, Button } from '@rneui/themed';
+
 import SelectDropdown from 'react-native-select-dropdown';
 
 
 export default SignUpLast2Screen = () => {
- 
- 
+
   const [religion, setReligion] = useState('');
-  
-  const [matrimonial,  setMatrimonial] = useState('');
+  const [matrimonial, setMatrimonial] = useState('');
   const [teint, setTeint] = useState('')
   const route = useRoute()
- 
-  const [level,setLevel] = useState('')
-  const [sex,setSex] = useState('')
-  const [height,setHeight] = useState('')
-  const [ethnie,setEthnie] = useState('')
-  const { setIsLoggedIn, setUserProfile, setToken } = useLogin();
+
+  const [level, setLevel] = useState('')
+  const [sex, setSex] = useState('')
+  const [height, setHeight] = useState('')
+  const [ethnie, setEthnie] = useState('')
+
   const navigation = useNavigation();
- 
+
   return (
-    <ScrollView contentContainerStyle={{ marginTop:20}}>
-       <SelectDropdown
+    <ScrollView contentContainerStyle={{ marginTop: 20 }}>
+      <SelectDropdown
         data={[
-           "Masculin",
-           "Feminin"
+          "Masculin",
+          "Feminin"
         ]}
         onSelect={(selectedItem, index) => {
           console.log(selectedItem, index);
           setSex(selectedItem);
 
-        }}
-
-
-
-
-        buttonTextAfterSelection={(selectedItem, index) => {
+        }} buttonTextAfterSelection={(selectedItem, index) => {
 
 
           return selectedItem;
@@ -204,15 +197,7 @@ export default SignUpLast2Screen = () => {
           console.log(selectedItem, index);
           setTeint(selectedItem)
 
-        }}
-
-
-
-
-        buttonTextAfterSelection={(selectedItem, index) => {
-
-
-          return selectedItem;
+        }} buttonTextAfterSelection={(selectedItem, index) => { return selectedItem;
         }}
         rowTextForSelection={(item, index) => {
           return item;
@@ -449,21 +434,21 @@ export default SignUpLast2Screen = () => {
         rowTextStyle={styles.dropdown1RowTxtStyle}
 
       />
- 
+
       <Button radius={"sm"} type="solid" buttonStyle={{
         backgroundColor: 'green',
         borderWidth: 2,
         borderColor: 'white',
         borderRadius: 30,
       }}
-    
-        disabled={!(religion  && matrimonial && teint && level && height && ethnie && sex)}
+
+        disabled={!(religion && matrimonial && teint && level && height && ethnie && sex)}
         containerStyle={{
           width: 200,
           marginHorizontal: 50,
           marginVertical: 10,
         }}
-        titleStyle={{ fontWeight: 'bold', padding: 10 }} onPress={() => navigation.navigate('Information3',{'page1':route.params,sex:sex,religion:religion,matrimonial:matrimonial,heigh:height,teint:teint,level:level,ethnie:ethnie})}>
+        titleStyle={{ fontWeight: 'bold', padding: 10 }} onPress={() => navigation.navigate('Information3', { 'page1': route.params, sex: sex, religion: religion, matrimonial: matrimonial, heigh: height, teint: teint, level: level, ethnie: ethnie })}>
         Continuer
         <Icon name="arrow-forward" type='ionicon' color='white' />
       </Button>

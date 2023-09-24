@@ -1,6 +1,6 @@
-import { StyleSheet, Text, ScrollView,Image,Alert, View } from 'react-native'
+import { StyleSheet, Text, ScrollView,Image,Alert  } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {   useRoute } from '@react-navigation/native';
 import { Avatar, Input, Icon ,Button} from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import { useLogin } from './context/loginprovider';
@@ -11,7 +11,7 @@ const SignUpImage = () => {
     console.log(route.params)
     const [partenaire, setPartenaire] = useState('')
     const [about_me, setAboutMe] = useState('') 
-    const { isLoggedIn, setIsLoggedIn, token, setToken, userprofile, setUserProfile } = useLogin();
+    const {  setIsLoggedIn,   setToken,   setUserProfile } = useLogin();
  
 
 
@@ -24,7 +24,7 @@ const SignUpImage = () => {
     
         });
     
-        console.log(result);
+       
     
         if (!result.canceled) {
           setImage(result.assets[0].uri);
@@ -123,7 +123,7 @@ const SignUpImage = () => {
                     setIsLoggedIn(true);
                   } 
                   else {
-                      alert('You do not have an account.')
+                      alert('Erreur')
                   }
   
               

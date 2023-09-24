@@ -6,8 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  TextInput,
+ 
   Alert,
 
   TouchableOpacity,
@@ -16,7 +15,7 @@ import { useLogin } from "./context/loginprovider";
 import { Dialog, Icon, Input ,Avatar,ListItem} from "@rneui/themed";
 
 export default function Login() {
-  const { isLoggedIn, setIsLoggedIn, token, setToken, userprofile, setUserProfile } = useLogin();
+  const {   setIsLoggedIn, token, setToken, userprofile, setUserProfile } = useLogin();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -55,7 +54,7 @@ export default function Login() {
     flexDirection:'row',
     justifyContent: "center",
      borderRadius:50,
-    backgroundColor: "#0088ff",}}>Se connecter sur un autre compte </Text>
+    backgroundColor: "#0088ff",}}>Se connecter avec un autre compte </Text>
       </TouchableOpacity>
       </View>
     )
@@ -83,8 +82,6 @@ export default function Login() {
         errorStyle={{ color: 'red' }}
         errorMessage={errorEmail}
       />
-
-
       <Input
         placeholder="Mot de passe "
         style={{ margin: 3 }}
@@ -94,9 +91,6 @@ export default function Login() {
         rightIcon = { visible ? <Icon name="eye" type='feather' size={20} onPress={()=>setVisible(false)} />:<Icon name="eye-off" type='feather' size={20} onPress={()=>setVisible(true)} />} 
 
       />
-
-
-
       <TouchableOpacity onPress={() => {
         navigation.navigate('reset_password')
       }}>
@@ -124,7 +118,7 @@ export default function Login() {
             })
               .then((response) => response.json())
               .then((response) => {
-                console.log(response)
+                
                 setLoading(false);
 
                 if (response.token === undefined) {
@@ -132,25 +126,16 @@ export default function Login() {
 
                 }
                 else {
-
-                  
-                   if (response.is_valid) { 
+                  if (response.is_valid) { 
                    
-                  setToken(response.token);
-
-                  setUserProfile(response.user);
+                  setToken(response.token); setUserProfile(response.user);
                   setIsLoggedIn(true);
                 } 
                 else {
                   navigation.navigate('Information',{email:email })
                 }
-
-            
-
-                }
-
-
-              }).catch((error) => { setLoading(false);console.log(error) })
+              }
+            }).catch((error) => { setLoading(false)  })
 
 
           }

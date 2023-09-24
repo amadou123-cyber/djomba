@@ -3,8 +3,10 @@ import React ,{useState} from 'react'
 import { ListItem,Button ,Icon,Avatar} from '@rneui/themed';
 import { useNavigation ,useRoute} from '@react-navigation/native';
 import { useLogin } from './context/loginprovider';
+import { Ionicons } from '@expo/vector-icons';
 
 const Setting = () => {
+  
     const route = useRoute();
     const {userprofile,setToken,token,setUserProfile,setIsLoggedIn} = useLogin();
     const getAge = birthDate => Math.floor((new Date() - new Date(birthDate).getTime()) / 3.15576e+10)
@@ -21,7 +23,7 @@ const Setting = () => {
               source={{ uri: userprofile.image  }}
             />
   <ListItem.Content>
-    <ListItem.Title>{userprofile.name}</ListItem.Title>
+    <ListItem.Title>{userprofile.name} <Ionicons name="ellipse" size={12} color="green" /></ListItem.Title>
     <ListItem.Subtitle>{age} ans</ListItem.Subtitle>
   </ListItem.Content>
   <ListItem.Chevron />
@@ -31,7 +33,7 @@ const Setting = () => {
   <ListItem bottomDivider onPress={() => navigation.navigate('Edit',{'id':userprofile.id})} >
     <Icon name="pencil" type="material-community" color="green" />
     <ListItem.Content>
-      <ListItem.Title>Editer votre page</ListItem.Title>
+      <ListItem.Title>Éditer votre page</ListItem.Title>
     </ListItem.Content>
 
    

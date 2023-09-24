@@ -19,8 +19,8 @@ const FAQ = () => {
         // body : 
   
       }).then((response) => response.json())
-        .then((json) => { setfaqs(json); console.log(json) })
-        .catch((error) => console.log(error))
+        .then((json) => { setfaqs(json)  })
+        .catch((error) => { })
   
     };
     useEffect(
@@ -31,8 +31,8 @@ const FAQ = () => {
      <FlatList data={faqs} keyExtractor={item => item.id} renderItem={({item,index}) =>(
         <ListItem>
             <ListItem.Content>
-            <ListItem.Title>{index+1}.{item.question}</ListItem.Title>
-            <ListItem.Subtitle>{item.response}</ListItem.Subtitle>
+            <ListItem.Title style={{ fontStyle:'italic',fontWeight:'bold',margin:5}}>{index+1}.{item.question}</ListItem.Title>
+            <ListItem.Subtitle style={{ fontStyle:'italic',}}>{item.response}</ListItem.Subtitle>
             </ListItem.Content>
         </ListItem>
      )} />

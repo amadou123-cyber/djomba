@@ -1,9 +1,9 @@
  
 import { useNavigation, useRoute } from '@react-navigation/native';
 /* eslint-disable no-undef */
-import React, { useState, useEffect  } from 'react';
-import { View, StyleSheet,   SafeAreaView, Image,   Dimensions,  TouchableOpacity, TextInput, Modal, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
-import { Text,Input, Icon,Button  } from '@rneui/themed';
+import React, { useState  } from 'react';
+import { View } from 'react-native';
+import {  Input  } from '@rneui/themed';
  
 export default ResetPasswordCodeScreen = () => {
     const [errormessage,setErrorMessage] = useState('');

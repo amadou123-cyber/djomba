@@ -7,14 +7,10 @@ import { useLogin } from './context/loginprovider';
 
 
 const Add_images = () => {
-    const route = useRoute()
+ 
     const navigation = useNavigation()
-    const [partenaire, setPartenaire] = useState('')
-    const [about_me, setAboutMe] = useState('') 
-    const { isLoggedIn, setIsLoggedIn, token, setToken, userprofile, setUserProfile } = useLogin();
-
-
-
+ 
+    const {   token,   userprofile } = useLogin(); 
     const [image, setImage] = useState(null)
     const [loading ,setLoading] = useState(false)
     const pickImage = async () => {
@@ -26,7 +22,7 @@ const Add_images = () => {
     
         });
     
-        console.log(result);
+       
     
         if (!result.canceled) {
           setImage(result.assets[0].uri);
@@ -86,15 +82,13 @@ const Add_images = () => {
                     .then((response) => response.json())
                     .then((response) => { 
                     if (response.is_valid) { 
-
-                   
                     setLoading(false)
                     navigation.replace('ProfileDetail',{id:userprofile.id,name:userprofile.name,age:  Math.floor((new Date() - new Date(userprofile.birthdate).getTime()) / 3.15576e+10) }) 
                   }
                     
                 })
                     .catch((error) => {
-                      console.log('error', error);
+                      //
                     });
                 
             }}>

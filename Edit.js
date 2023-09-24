@@ -1,46 +1,37 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, ScrollView, Image, Dimensions, TouchableOpacity, TextInput, Modal, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
-import { Text, Input, Icon,Card, Switch,Button ,ListItem} from '@rneui/themed';
+import { View, StyleSheet, ScrollView, Keyboard } from 'react-native';
+import { Text, Input, Icon, Button } from '@rneui/themed';
 import { useLogin } from './context/loginprovider';
-import { Ionicons } from '@expo/vector-icons';
+
 import SelectDropdown from 'react-native-select-dropdown';
 
 
 export default Edit = () => {
- 
- 
-   const {userprofile,token} = useLogin();
- 
-  const [pays,setPays] = useState('')
- 
- 
-  const route = useRoute()
+  const { userprofile, token } = useLogin();
+  const [pays, setPays] = useState('');
+  const route = useRoute();
   const [country, setCountry] = useState([])
   const [religion, setReligion] = useState('');
-  const [lieu,setLieu ] = useState('')
-  const [job,setjob] = useState('')
-  const [partenaire,setPartenaire] = useState('')
-  const [about_me,setAboutMe] = useState('')
-  const [matrimonial,  setMatrimonial] = useState('');
+  const [lieu, setLieu] = useState('')
+  const [job, setjob] = useState('')
+  const [partenaire, setPartenaire] = useState('')
+  const [about_me, setAboutMe] = useState('')
+  const [matrimonial, setMatrimonial] = useState('');
   const [teint, setTeint] = useState('')
- const [canLoad,setCanLoad] = useState(false);
-  const [level,setLevel] = useState('')
- const [loading,setLoading] = useState(false)
-  const [height,setHeight] = useState('')
-  const [ethnie,setEthnie] = useState('')
-  const [currentPage,setCurrentPage] = useState(1)
+
+  const [level, setLevel] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [height, setHeight] = useState('')
+  const [ethnie, setEthnie] = useState('')
+
   const navigation = useNavigation();
-  const [search,setSearch] = useState(false);
-  
- 
-  const [datas,setDatas] = useState([])
-   
-  const loaddata = () =>
-  {
+  const [datas, setDatas] = useState([])
+
+  const loaddata = () => {
     const url = `https://meubious.com/api/datings/${route.params.id}/`;
-    fetch(url,{
+    fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -50,98 +41,68 @@ export default Edit = () => {
       // body : 
 
     }).then((response) => response.json())
-    .then((json) =>{ setDatas(json.data);
-      const data = json.data;
-      setPays(data.country.id)
-      
-      setLieu(data.lieu);
-      setjob(data.job);
-    setReligion(data.religion);
-   setMatrimonial(data.situation_matrimoniale);
-   setTeint(data.teint) ;
-    setLevel(data.level);
-    setPartenaire(data.partenaire);
-    setAboutMe(data.description);
-  setHeight(data.taille);
-  const getAge = birthDate => Math.floor((new Date() - new Date(birthDate).getTime()) / 3.15576e+10)
-setEthnie(data.ethnie) }  ) 
-    .catch((error) =>console.log(error))
-    
+      .then((json) => {
+
+        const data = json.data;
+        setDatas(data);
+        setPays(data.country.id);
+        setLieu(data.lieu);
+        setjob(data.job);
+        setReligion(data.religion);
+        setMatrimonial(data.situation_matrimoniale);
+        setTeint(data.teint);
+        setLevel(data.level);
+        setPartenaire(data.partenaire);
+        setAboutMe(data.description);
+        setHeight(data.taille);
+
+        setEthnie(data.ethnie);
+      })
+      .catch((error) => { })
+
   };
-  useEffect (
-     loaddata,[route.id]
-  )  
+  useEffect(
+    loaddata, [route.id]
+  )
   const url_ville = 'https://meubious.com/api/countries/';
   const loadcountries = () => {
     fetch(url_ville).then((response) => response.json())
-      .then((json) => { setCountry(json)  })
-      .catch((error) => console.log(error))
+      .then((json) => { setCountry(json) })
+      .catch((error) => { })
 
   };
   useEffect(
     loadcountries, []
 
   )
- 
+
   return (
-    <ScrollView containerStyle={{marginTop:20}}>
-            <Input
-        rightIcon={{ type: 'feather', name: 'check', color: 'green' }}
-
-        leftIcon={{ type: 'entypo', name: 'email',size:17 }}
+    <ScrollView containerStyle={{ marginTop: 20 }}>
+      <Input
+        rightIcon={{ type: 'feather', name: 'check', color: 'green' }} leftIcon={{ type: 'entypo', name: 'email', size: 17 }}
         disabled
         errorStyle={{ color: 'red' }}
-        value={userprofile.email}
-
-     
-      />
-            <Input
-        rightIcon={{ type: 'feather', name: 'check', color: 'green' }}
-
-        leftIcon={{ type: 'entypo', name: 'user',size:17 }}
+        value={userprofile.email} />
+      <Input
+        rightIcon={{ type: 'feather', name: 'check', color: 'green' }} leftIcon={{ type: 'entypo', name: 'user', size: 17 }}
         disabled
         errorStyle={{ color: 'red' }}
-        value={userprofile.name}
-
-    
-
-      />
-                  <Input
-        rightIcon={{ type: 'feather', name: 'check', color: 'green' }}
-
-        leftIcon={{ type: 'font-awesome', name: 'intersex',size:17 }}
+        value={userprofile.name} />
+      <Input
+        rightIcon={{ type: 'feather', name: 'check', color: 'green' }} leftIcon={{ type: 'font-awesome', name: 'intersex', size: 17 }}
         disabled
         errorStyle={{ color: 'red' }}
-        value={datas.sex}
-
-    
-
-      />
-                  <Input
-        rightIcon={{ type: 'feather', name: 'check', color: 'green' }}
-
-        leftIcon={{ type: 'font-awesome', name: 'birthday-cake',size:17 }}
+        value={datas.sex} />
+      <Input
+        rightIcon={{ type: 'feather', name: 'check', color: 'green' }} leftIcon={{ type: 'font-awesome', name: 'birthday-cake', size: 17 }}
         disabled
         errorStyle={{ color: 'red' }}
-        value={userprofile.birthdate}
-
-    
-
-      />
-      
- 
+        value={userprofile.birthdate} />
       <SelectDropdown
         data={country}
-        onSelect={(selectedItem, index) => {
- 
-          setPays(selectedItem.id);
-          
-
-        }}
-
-        defaultValueByIndex = {pays-1}
+        onSelect={(selectedItem, index) => { setPays(selectedItem.id); }}
+        defaultValueByIndex={pays - 1}
         search
-       
         searchInputStyle={{
           backgroundColor: 'white',
           borderBottomWidth: 1,
@@ -154,8 +115,6 @@ setEthnie(data.ethnie) }  )
         }}
         defaultButtonText={'Pays de residence'}
         buttonTextAfterSelection={(selectedItem, index) => {
-
-         
           return selectedItem.name;
         }}
         rowTextForSelection={(item, index) => {
@@ -163,16 +122,10 @@ setEthnie(data.ethnie) }  )
         }}
         renderCustomizedButtonChild={(selectedItem, index) => {
           return (
-            <View style={{
-              flex: 1,
-              flexDirection: 'row',
-
-              alignItems: 'center',
-            }}>
+            <View style={{ flex: 1, flexDirection: 'row',
+  alignItems: 'center' }}>
 
               <Icon type='font-awesome' name="globe" color={'#444'} size={18} />
-
-
               <Text style={{
                 textAlign: 'center',
                 fontSize: 20,
@@ -195,60 +148,41 @@ setEthnie(data.ethnie) }  )
         rowTextStyle={styles.dropdown1RowTxtStyle}
 
       />
-                        <Input
-       
-
-        leftIcon={{ type: 'font-awesome', name: 'home',size:17 }}
-       
-        errorStyle={{ color: 'red' }}
+      <Input leftIcon={{ type: 'font-awesome', name: 'home', size: 17 }} 
         placeholder="Lieu"
         value={lieu}
-        onChangeText ={(text) => setLieu(text)}
-    
+        onChangeText={(text) => setLieu(text)} onEndEditing={() => Keyboard.dismiss()}/>
+      <Input leftIcon={{ type: 'material-icon', name: 'work', size: 17 }} errorStyle={{ color: 'red' }}
+        placeholder='Job'
+        value={job}
+        onChangeText={(text) => setjob(text)} onEndEditing={() => Keyboard.dismiss()}/>
+      <Input
+        placeholder='A propos de vous ...' multiline
+        value={about_me}
+        leftIcon={{ type: 'material-community', name: 'account-heart' }}
+        onChangeText={(text) => setAboutMe(text)}
+        onEndEditing={() => Keyboard.dismiss()}
+      />
+      <Input
+        value={partenaire}
+        placeholder='Partenaire souhaite ... ' multiline
+        leftIcon={{ type: 'material-community', name: 'hand-heart' }}
+        onChangeText={(text) => setPartenaire(text)}
+        onEndEditing={() => Keyboard.dismiss()}
 
       />
-         <Input
-       
-
-       leftIcon={{ type: 'material-icon', name: 'work',size:17 }}
-      
-       errorStyle={{ color: 'red' }}
-       placeholder='Job'
-       value={job}
-       onChangeText ={(text) => setjob(text)}
-
-   
-
-     />
-                 <Input
-                placeholder='A propos de vous ...' multiline
-                value = {about_me}
-                leftIcon={{ type: 'material-community', name: 'account-heart' }}
-                onChangeText={(text) => setAboutMe(text)}
-            />
-            <Input
-               value = {partenaire}
-                placeholder='Partenaire souhaite ... ' multiline
-                leftIcon={{ type: 'material-community', name: 'hand-heart' }}
-                onChangeText={(text) => setPartenaire(text)}
-
-            />
       <SelectDropdown
         data={[
           'Islam', 'Christianisme', 'Autres'
         ]}
         onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index);
+
           setReligion(selectedItem);
 
         }}
-
         defaultValue={datas.religion}
         defaultButtonText={'Religion'}
-        buttonTextAfterSelection={(selectedItem, index) => {
-
-
-          return selectedItem;
+        buttonTextAfterSelection={(selectedItem, index) => {  return selectedItem;
         }}
         rowTextForSelection={(item, index) => {
           return item
@@ -280,8 +214,7 @@ setEthnie(data.ethnie) }  )
         }}
 
         buttonStyle={styles.dropdown1BtnStyle}
-        buttonTextStyle={styles.dropdown1BtnTxtStyle}
-
+        buttonTextStyle={styles.dropdown1BtnTxtStyle} 
         dropdownIconPosition={'right'}
         dropdownStyle={styles.dropdown1DropdownStyle}
         rowStyle={styles.dropdown1RowStyle}
@@ -296,19 +229,12 @@ setEthnie(data.ethnie) }  )
           "Marié",
         ]}
         onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index);
+
           setMatrimonial(selectedItem);
 
         }}
-
-
         defaultValue={datas.situation_matrimoniale}
-
-        buttonTextAfterSelection={(selectedItem, index) => {
-
-
-          return selectedItem;
-        }}
+        buttonTextAfterSelection={(selectedItem, index) => { return selectedItem }}
         rowTextForSelection={(item, index) => {
           return item;
         }}
@@ -352,18 +278,13 @@ setEthnie(data.ethnie) }  )
           , "Blanc"
         ]}
         onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index);
+
           setTeint(selectedItem)
 
         }}
 
-        defaultValue={datas.teint}
-
-
-        buttonTextAfterSelection={(selectedItem, index) => {
-
-
-          return selectedItem;
+        defaultValue={datas.teint} 
+        buttonTextAfterSelection={(selectedItem, index) => { return selectedItem;
         }}
         rowTextForSelection={(item, index) => {
           return item;
@@ -412,19 +333,8 @@ setEthnie(data.ethnie) }  )
           ("Doctorat", "Doctorat"),
           ("Postdoctoral", "Postdoctoral")
         ]}
-        onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index);
-          setLevel(selectedItem);
-
-        }}
-
-        defaultValue={datas.level}
-
-
-        buttonTextAfterSelection={(selectedItem, index) => {
-
-
-          return selectedItem;
+        onSelect={(selectedItem, index) => { setLevel(selectedItem); }} defaultValue={datas.level} buttonTextAfterSelection={(selectedItem, index) => {
+        return selectedItem;
         }}
         rowTextForSelection={(item, index) => {
           return item;
@@ -470,20 +380,9 @@ setEthnie(data.ethnie) }  )
           "Moyenne",
           "Grande"
         ]}
-        onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index);
-
-          setHeight(selectedItem);
-        }}
+        onSelect={(selectedItem, index) => { setHeight(selectedItem) }}
         defaultValue={datas.taille}
-
-
-
-
-        buttonTextAfterSelection={(selectedItem, index) => {
-
-
-          return selectedItem;
+        buttonTextAfterSelection={(selectedItem, index) => { return selectedItem;
         }}
         rowTextForSelection={(item, index) => {
           return item;
@@ -550,19 +449,9 @@ setEthnie(data.ethnie) }  )
           "Tenda",
           "Toura",
         ]}
-        onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index);
-          setEthnie(selectedItem);
-
-        }}
-
-
-
-defaultValue={datas.ethnie}
-        buttonTextAfterSelection={(selectedItem, index) => {
-
-
-          return selectedItem;
+        onSelect={(selectedItem, index) => { setEthnie(selectedItem) }}
+        defaultValue={datas.ethnie}
+        buttonTextAfterSelection={(selectedItem, index) => { return selectedItem;
         }}
         rowTextForSelection={(item, index) => {
           return item;
@@ -601,88 +490,65 @@ defaultValue={datas.ethnie}
         rowTextStyle={styles.dropdown1RowTxtStyle}
 
       />
- 
- 
       <Button radius={"sm"} type="solid" buttonStyle={{
         backgroundColor: 'green',
         borderWidth: 2,
         borderColor: 'white',
         borderRadius: 30,
-      }} 
-      loading={loading}
-        
-        containerStyle={{
-     
-          marginHorizontal: 50,
+      }}
+        loading={loading}
+        containerStyle={{ marginHorizontal: 50,
           marginVertical: 10,
         }}
-        disabled = {!(lieu && job)}
-        titleStyle={{ fontWeight: 'bold', padding: 10 }} onPress={() => { 
+        disabled={!(lieu && job)}
+        titleStyle={{ fontWeight: 'bold', padding: 10 }} onPress={() => {
           setLoading(true)
           const data = new FormData();
-          data.append('country',pays);
-          data.append('lieu',lieu);
-          data.append('job',job);
-          data.append('religion',religion);
-          data.append('situation_matrimoniale',matrimonial);
-          data.append('teint',teint)
-          data.append('level',level)
-          data.append('taille',height)
-          data.append('ethnie',ethnie)
-          data.append('description',about_me);
-          data.append('partenaire',partenaire);
-         console.log(data)
-          
-          fetch('https://meubious.com/api/edit-profile-dating/' , {
-              method: 'POST',
-              headers: {
-                  'Authorization': `Token ${token}`,
-                  'Content-Type': 'multipart/form-data',
-              },
-              body:data
-            
-            })
-              .then((response) => response.json())
-              .then((response) => {
-                console.log(response)
-                 if (response.is_valid){
+          data.append('country', pays);
+          data.append('lieu', lieu);
+          data.append('job', job);
+          data.append('religion', religion);
+          data.append('situation_matrimoniale', matrimonial);
+          data.append('teint', teint)
+          data.append('level', level)
+          data.append('taille', height)
+          data.append('ethnie', ethnie)
+          data.append('description', about_me);
+          data.append('partenaire', partenaire);
+          fetch('https://meubious.com/api/edit-profile-dating/', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Token ${token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+            body: data
 
-                 setLoading(false);
-                 navigation.replace('ProfileDetail',{id:userprofile.id,name:userprofile.name,age:  Math.floor((new Date() - new Date(userprofile.birthdate).getTime()) / 3.15576e+10) }) 
-                 } else {
-                   
-                 } 
-                    })
+          })
+            .then((response) => response.json())
+            .then((response) => {
+
+              if (response.is_valid) {
+
+                setLoading(false);
+                navigation.replace('ProfileDetail', { id: userprofile.id, name: userprofile.name, age: Math.floor((new Date() - new Date(userprofile.birthdate).getTime()) / 3.15576e+10) })
+              } else {
+
+              }
+            })
         }
-         } >
-       
-        <Icon name="edit" type='entypo' color='white' />
+        } > <Icon name="edit" type='entypo' color='white' />
         Editer
       </Button>
 
     </ScrollView>
   )
 }
-const styles = StyleSheet.create({
-
-
-
-
+const styles = StyleSheet.create({ 
   dropdown1BtnStyle: {
-
-    width: '97%',
-
-
-    padding: 3,
-
-
+    width: '97%', padding: 3, 
     borderRadius: 8,
     borderBottomWidth: 1,
-    marginBottom: 10,
-
-
-
-  },
+    marginBottom: 10 },
   dropdown1BtnTxtStyle: { color: '#444', textAlign: 'left' },
   dropdown1DropdownStyle: { backgroundColor: '#EFEFEF', top: 0, margin: 0, padding: 0 },
   dropdown1RowStyle: { backgroundColor: '#EFEFEF', borderBottomColor: '#C5C5C5' },

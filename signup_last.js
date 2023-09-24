@@ -14,13 +14,13 @@ export default SignUpLastScreen = () => {
   const [name, setName] = useState('');
   const [job, setJob] = useState(' ');
   const [password, setPassword] = useState('');
-  const [pays,setPays] = useState('')
+  const [pays, setPays] = useState('')
   const [lieu, setLieu] = useState('')
-  const [birthdate,setBirthdate]  = useState('') 
+  const [birthdate, setBirthdate] = useState('')
   const route = useRoute()
   const [country, setCountry] = useState([])
   const email = route.params.email;
- 
+
   const navigation = useNavigation();
   const url_ville = 'https://meubious.com/api/countries/';
   const loadcountries = () => {
@@ -33,7 +33,7 @@ export default SignUpLastScreen = () => {
     loadcountries, []
   )
   return (
-    <ScrollView  contentContainerStyle={{ marginTop:20}}>
+    <ScrollView contentContainerStyle={{ marginTop: 20 }}>
       <Input
         rightIcon={{ type: 'feather', name: 'check', color: 'green' }}
 
@@ -73,36 +73,36 @@ export default SignUpLastScreen = () => {
       <Input
 
 
-leftIcon={{ type: 'font-awesome', name: 'birthday-cake' }}
+        leftIcon={{ type: 'font-awesome', name: 'birthday-cake' }}
 
-placeholder='Date de naissance  jj/mm/aaaa'
- value = {birthdate}
-onChangeText={(text) => { setBirthdate(text) }} 
-onEndEditing={() =>  {
-  let regex =  /^[0-9]{4}[\-][0-9]{2}[\-][0-9]{2}$/g;
-  if (regex.test(birthdate) === false) {
-    setBirthdate('');
-    alert('format de la date est invalide.');
-     
-  }
-  else {
-    const date = new Date(birthdate)
- 
-    if (date ===  undefined) {
-      setBirthdate('');
-      alert('format de la date est invalide.');
+        placeholder='Date de naissance  jj/mm/aaaa'
+        value={birthdate}
+        onChangeText={(text) => { setBirthdate(text) }}
+        onEndEditing={() => {
+          let regex = /^[0-9]{4}[\-][0-9]{2}[\-][0-9]{2}$/g;
+          if (regex.test(birthdate) === false) {
+            setBirthdate('');
+            alert('format de la date est invalide.');
 
-    }
-    
-  }
- 
-}}/>
+          }
+          else {
+            const date = new Date(birthdate)
+
+            if (date === undefined) {
+              setBirthdate('');
+              alert('format de la date est invalide.');
+
+            }
+
+          }
+
+        }} />
       <SelectDropdown
         data={country}
         onSelect={(selectedItem, index) => {
           console.log(selectedItem, index);
           setPays(selectedItem.name);
-          
+
 
         }}
 
@@ -121,7 +121,7 @@ onEndEditing={() =>  {
         defaultButtonText={'Pays de residence'}
         buttonTextAfterSelection={(selectedItem, index) => {
 
-         
+
           return selectedItem.name;
         }}
         rowTextForSelection={(item, index) => {
@@ -169,15 +169,15 @@ onEndEditing={() =>  {
         placeholder='Lieu de résidence'
 
         onChangeText={(text) => { setLieu(text) }} />
-              <Input
+      <Input
 
 
-leftIcon={{ type: 'material-icon', name: 'work' }}
+        leftIcon={{ type: 'material-icon', name: 'work' }}
 
-placeholder='Profession'
+        placeholder='Profession'
 
-onChangeText={(text) => { setJob(text) }} />
- 
+        onChangeText={(text) => { setJob(text) }} />
+
       <Input
 
 
@@ -203,14 +203,14 @@ onChangeText={(text) => { setJob(text) }} />
         borderColor: 'white',
         borderRadius: 30,
       }}
-       
-        disabled={!(name.length > 10 && password.length > 5 && lieu.length > 4 && pays.length >0 && birthdate.length > 1 && job.length > 2)}
+
+        disabled={!(name.length > 10 && password.length > 5 && lieu.length > 4 && pays.length > 0 && birthdate.length > 1 && job.length > 2)}
         containerStyle={{
           width: 200,
           marginHorizontal: 50,
           marginVertical: 10,
         }}
-        titleStyle={{ fontWeight: 'bold', padding: 10 }}  onPress={() => navigation.navigate("Information2",{name:name,passowrd:password,job:job,lieu:lieu,pays:pays,email:email,birthdate:birthdate})}>
+        titleStyle={{ fontWeight: 'bold', padding: 10 }} onPress={() => navigation.navigate("Information2", { name: name, passowrd: password, job: job, lieu: lieu, pays: pays, email: email, birthdate: birthdate })}>
         Continuer
         <Icon name="arrow-forward" type='ionicon' color='white' />
       </Button>

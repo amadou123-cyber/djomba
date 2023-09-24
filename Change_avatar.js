@@ -1,17 +1,16 @@
 import { StyleSheet, Text, ScrollView,Image,Alert, View } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Avatar, Input, Icon ,Button} from '@rneui/themed';
+import { useNavigation  } from '@react-navigation/native';
+import { Avatar,  Icon ,Button} from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import { useLogin } from './context/loginprovider';
 
 
 const Change_avatar = () => {
-    const route = useRoute()
+   
     const navigation = useNavigation()
-    const [partenaire, setPartenaire] = useState('')
-    const [about_me, setAboutMe] = useState('') 
-    const { isLoggedIn, setIsLoggedIn, token, setToken, userprofile, setUserProfile } = useLogin();
+  
+    const {  token,   userprofile, setUserProfile } = useLogin();
 
 
 
@@ -26,7 +25,7 @@ const Change_avatar = () => {
     
         });
     
-        console.log(result);
+       
     
         if (!result.canceled) {
           setImage(result.assets[0].uri);
@@ -39,7 +38,7 @@ const Change_avatar = () => {
 <Avatar
           size={64}
           rounded
-          onPress={() => {Alert.alert('photo','Choisissez une photo où votre visage est visible, sinon après verification votre compte peut être suspendu définitivement.',[
+          onPress={() => {Alert.alert('Photo', "Sélectionnez une photo sur laquelle votre visage est visible, sinon après vérification , votre compte risque d'être bloqué définitivement.",[
             {text:'Compris',onPress:()=> pickImage() },
             {text:'Non' }
           ]) }}
@@ -94,7 +93,7 @@ const Change_avatar = () => {
                     
                 })
                     .catch((error) => {
-                      console.log('error', error);
+                      //console.log('error', error);
                     });
                 
             }}>
