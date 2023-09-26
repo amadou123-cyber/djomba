@@ -8,7 +8,7 @@ import { useRef } from 'react';
 
 export default function Dialog({ route, navigation }) {
 
-  const { lastmessage, token, userprofile } = useLogin();
+  const { lastmessage,setLastMessage, token,setMessage, userprofile } = useLogin();
   const [data, setData] = useState([]);
   const [canLoad, setCanLoad] = useState(true);
   const [searching, setSearching] = useState(false)
@@ -57,7 +57,7 @@ export default function Dialog({ route, navigation }) {
 
   }
   useEffect(() => {
-
+ 
     setData([]);
     setCurrentPage(1);
     getMessages();
@@ -67,12 +67,12 @@ export default function Dialog({ route, navigation }) {
 
       <FlatList
         ListFooterComponent={() =>
-          canLoad ? <Button loading={searching} onPress={getMessages} buttonStyle={{ padding: 10, margin: 30, width: 100, alignSelf: 'center' }} icon={{
-            name: 'plus',
+          canLoad ? <Button loading={searching} onPress={getMessages} buttonStyle={{ padding: 10, margin: 30 ,borderRadius:50, alignSelf: 'center' }} icon={{
+            name: 'arrow-down',
             type: 'font-awesome',
             size: 15,
             color: 'white',
-          }} title='Voir Plus' /> : null}
+          }} /> : null}
         data={data}
 
         ListEmptyComponent={() => {

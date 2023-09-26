@@ -55,6 +55,13 @@ const Setting = () => {
     
    
   </ListItem>
+  <ListItem bottomDivider onPress={() => navigation.navigate('Likes')}>
+    <Icon name="heart" type="font-awesome" color="blue" />
+    <ListItem.Content>
+      <ListItem.Title>Likes</ListItem.Title>
+    </ListItem.Content>
+ 
+  </ListItem>
   <ListItem bottomDivider onPress={() => navigation.navigate('FAQ')}>
     <Icon name="question" type="font-awesome" color="green" />
     <ListItem.Content>

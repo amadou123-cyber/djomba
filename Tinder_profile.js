@@ -250,7 +250,6 @@ export default ProfileDetailScreen = () => {
             <Text style={{ fontWeight: 'bold' }}>Pays :</Text>
             <Text style={{ fontWeight: 'bold' }}>Lieu :</Text>
             <Text style={{ fontWeight: 'bold' }}>Niveau d'études:</Text>
-
             <Text style={{ fontWeight: 'bold' }}>Profession:</Text>
             <Text style={{ fontWeight: 'bold' }}>Religion:</Text>
             <Text style={{ fontWeight: 'bold' }}>Etat civil: </Text>
@@ -260,10 +259,9 @@ export default ProfileDetailScreen = () => {
             <Text style={{ fontWeight: 'bold' }}>Date d'inscription:</Text>
           </View>
           <View>
-            <Text > {userprofile.id !== route.id ? (dating.online ? <Ionicons name="ellipse" size={12} color="green"  > En ligne</Ionicons> : <Ionicons name="ellipse" size={12} color="gray"  > Hors ligne</Ionicons>) : <Ionicons name="ellipse" size={12} color="orange"  > En ligne</Ionicons>}</Text>
+            <Text > {userprofile.id !== route.id ? (dating.online ? <Ionicons name="ellipse" size={12} color="green"  > En ligne</Ionicons> : <Ionicons name="ellipse" size={12} color="gray"  > Hors ligne</Ionicons>) : <Ionicons name="ellipse" size={12} color="green"  > En ligne</Ionicons>}</Text>
             <Text > {dating.country.name}  </Text>
             <Text > {dating.lieu ? dating.lieu : 'Conakry'}  </Text>
-
             <Text > {dating.level}  </Text>
             <Text > {dating.job}  </Text>
             <Text > {dating.religion}  </Text>

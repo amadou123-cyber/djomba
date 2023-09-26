@@ -1,18 +1,23 @@
 import { View, Text, Image, RefreshControl, TouchableOpacity, ActivityIndicator, FlatList, Platform } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { withBadge, Icon, Card, Button, Badge, Avatar } from '@rneui/themed';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useLogin } from './context/loginprovider';
 
 
 const Tinder = () => {
-  const BadgedIcon = withBadge(15)(Icon);
-  const { setIsLoggedIn } = useLogin();
-  const BadgedIconMatch = withBadge('')(Icon);
+ 
+  
+ 
   const [datings, setDatings] = useState([])
   const [loading, setLoading] = useState(false);
-  const { userprofile, token } = useLogin();
+
+  const { userprofile,  token ,setLastMessage  } = useLogin();
+   const [message,setMessage] = useState(0)
+  const [notification,setNotification] = useState(0)
+  const ws = useRef(null); 
+  const [opened,setopened] = useState(false)
   const [canLoad, setCanLoad] = useState(true)
   const [currentPage, setCurrentPage] = useState(1);
   const navigation = useNavigation()
@@ -36,23 +41,93 @@ const Tinder = () => {
       .finally(() => setLoading(false))
 
   };
-  const loadMoreItem = () => {
-    if (canLoad && !loading) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+ 
   useEffect(
     loaddata, [currentPage]
   )
+  useEffect(() => {
+    const socket = new WebSocket(`wss://meubious.com/ws/chat/dating_${userprofile.id}/`);
+
+    socket.onopen = () => {
+      console.log("opened ");
+    };
+
+    socket.onclose = () => {
+      //console.log("closed  ");
+      setopened(!opened)
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data) ;
+      console.log(data)
+      if (data.type == 'chat_message'){
+     
+        if (data.notif){
+          if (data.remove){
+            setNotification((notification) => notification-1);
+          }
+          else {
+            setNotification((notification) => notification+1);
+          }
+           
+         
+
+        }
+        else {
+          setMessage((message) => message+1);
+          setLastMessage(data.chat_id);
+        
+        }
+      
+      }
+       
+   
+    } 
+    ws.current = socket;
+    return () => {
+      socket.close();
+    };
+
+     
+
+   
+  }, [ opened,userprofile]);
   const renderLoader = () => {
     return (
-      loading ?
-        <View >
-          <ActivityIndicator size="large" color="#aaa" />
-        </View> : null
+        canLoad ?
+            <Button buttonStyle={{
+                backgroundColor: 'violet',
+                borderWidth: 2,
+                borderColor: 'white',
+                borderRadius: 30,
+            }}
+
+                loading={loading}
+                disabled={loading}
+                containerStyle={{
+                    
+                    alignSelf: 'center',
+                    marginHorizontal: 20,
+                    marginVertical: 10,
+                }}
+                icon={{name:'arrow-down',type:'font-awesome'}}
+                titleStyle={{ fontWeight: 'bold', padding: 5 }} onPress={
+                    () => {
+                        if (canLoad && !loading) {
+
+                            setCurrentPage(currentPage + 1);
+
+                        }
+                    }
+                } >
+               
+
+            </Button> : null
     );
-  };
+};
   useLayoutEffect(() => {
+    const NotifIcon = withBadge(notification)(Icon);
+    const MessageIcon = withBadge(message)(Icon);
     navigation.setOptions({
       title: 'djomba',
       headerLeft: () => (
@@ -67,9 +142,15 @@ const Tinder = () => {
           />
           </View>
           
+          
           </TouchableOpacity >
-          <TouchableOpacity style={{ padding: 17 }} onPress={() => navigation.navigate('Likes')}>
-            <BadgedIconMatch name='heart' type='entypo' size={25} />
+        
+          <TouchableOpacity style={{ padding: 17 }} onPress={() => {setNotification((notification)=>notification-notification);navigation.navigate('Notification')} }>
+            {
+             notification  ? <NotifIcon name='bell' type='font-awesome' size={25} />:<Icon name='bell' type='font-awesome' size={25} />
+            }
+             
+
 
           </TouchableOpacity>
         </>
@@ -81,9 +162,11 @@ const Tinder = () => {
             <Icon name='search' type='feather' size={25} />
 
           </TouchableOpacity>
-          <TouchableOpacity style={{ padding: 17 }} onPress={() => navigation.navigate('Chats')}>
-            <BadgedIcon name='chatbubble-ellipses-sharp' type='ionicon' size={25} />
-
+          <TouchableOpacity style={{ paddingLeft: 17 }} onPress={() =>{ setMessage((message) => message-message);navigation.navigate('Chats')}  }>
+ 
+            {
+             message ? <MessageIcon name='chatbubble-ellipses-sharp' type='ionicon' size={25} />:<Icon name='chatbubble-ellipses-sharp' type='ionicon' size={25} />
+            }
 
           </TouchableOpacity>
 
@@ -92,7 +175,7 @@ const Tinder = () => {
       )
 
     })
-  }, [navigation, userprofile.image]);
+  }, [navigation, userprofile.image ,notification,message]);
   const renderItem = ({ item }) => (
     <Card containerStyle={{ margin: 3, padding: 0, borderRadius: 10, width: '48.5%' }} >
       <TouchableOpacity onPress={() => navigation.navigate('ProfileDetail', { id: item.profile, name: item.nom, age: getAge(item.birthdate) })}>
@@ -120,8 +203,8 @@ const Tinder = () => {
         } color='violet' buttonStyle={{
           padding:5,margin:5,borderRadius:8
         }} onPress={() =>{setDatings([]);setCurrentPage(1) }}> Actualiser  </Button>:null )}
-        onEndReached={loadMoreItem}
-        onEndReachedThreshold={0}
+   
+     
         data={datings}
         numColumns={2}
         key={Math.random().toString()}

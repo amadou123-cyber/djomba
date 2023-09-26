@@ -1,5 +1,5 @@
-import { FlatList, TouchableWithoutFeedback, Keyboard, Image,   Alert, TouchableOpacity,   Text,   View  } from "react-native";
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { FlatList, TouchableWithoutFeedback, Keyboard,KeyboardAvoidingView, Image,   Alert, TouchableOpacity,   Text,   View  } from "react-native";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { HeaderBackButton } from "@react-navigation/elements";
@@ -20,9 +20,11 @@ import * as ImagePicker from 'expo-image-picker';
     const [images, setImages] = useState(null);
     const [visible, setVisible] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [canLoad, setCanLoad] = useState(true)
+    const [opened,setopened] = useState(false)
+    const [canLoad, setCanLoad] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const user = route.user;
+    const ws = useRef(null);
     const [image, setImage] = useState(null)
     const [hasimage, sethasimage] = useState(false)
 
@@ -162,6 +164,38 @@ import * as ImagePicker from 'expo-image-picker';
             )
         })
     }, [navigation]);
+    useEffect(() => {
+        const socket = new WebSocket(`wss://meubious.com/ws/chat/chatdating_${route.chat.id}/`);
+    
+        socket.onopen = () => {
+          console.log("opened chat");
+        };
+    
+        socket.onclose = () => {
+          console.log("closed chat ");
+          setopened(!opened)
+        };
+    
+        socket.onmessage = (event) => {
+          const data = JSON.parse(event.data) ;
+          if (data.type==='chat_message'){
+            setMessages(messages => [data.message, ...messages]);
+                    setLastMessage(data.message._id) 
+ 
+          }
+                            
+           
+       
+        } 
+        ws.current = socket;
+        return () => {
+          socket.close();
+        };
+    
+         
+    
+       
+      }, [ opened,route.chat.id]);
 
     const renderItem = ({ item }) =>
         item.user.profile === userprofile.id ?
@@ -247,11 +281,12 @@ import * as ImagePicker from 'expo-image-picker';
                     loading={loading}
                     disabled={loading}
                     containerStyle={{
-                        width: 100,
+                        
                         alignSelf: 'center',
-                        marginHorizontal: 10,
-                        marginVertical: 1,
+                        marginHorizontal: 20,
+                        marginVertical: 10,
                     }}
+                    icon ={{name:'arrow-up',type:'font-awesome'}}
                     titleStyle={{ fontWeight: 'bold', padding: 5 }} onPress={
                         () => {
                             if (canLoad && !loading) {
@@ -261,7 +296,7 @@ import * as ImagePicker from 'expo-image-picker';
                             }
                         }
                     } >
-                    voir plus
+                     
 
                 </Button> : null
         );
@@ -286,7 +321,8 @@ import * as ImagePicker from 'expo-image-picker';
                         });
                     });
                 }
-                data.append('message', message_item)
+                data.append('message', message_item);
+                data.append('other',user.profile);
                 const response = await fetch('https://meubious.com/api/messages-dating/' + route.chat.id + "/", {
                     method: 'POST',
                     headers: {
@@ -297,11 +333,10 @@ import * as ImagePicker from 'expo-image-picker';
 
                 });
                 const json = await response.json();
-                if (json.is_valid) {
+                if (!json.is_valid) {
 
-                    setMessages(messages => [json.message, ...messages]);
-                    setLastMessage(json.message)
-
+ 
+ alert('erreur ...')
                 }
 
             } catch (error) {
@@ -320,11 +355,13 @@ import * as ImagePicker from 'expo-image-picker';
                 visible={visible}
                 onRequestClose={() => setVisible(false)}
             />
-
+ <KeyboardAvoidingView
+    style = {{ flex: 1 }}
+    behavior={Platform.OS === "ios" ? "padding" : null}> 
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <FlatList ListFooterComponent={renderLoader}
-
+  
                     ListHeaderComponent={() =>
                     (
                         hasimage ? <Text style={{
@@ -336,6 +373,7 @@ import * as ImagePicker from 'expo-image-picker';
                             backgroundColor: 'violet'
                         }}>Image en cours d'envoie ...</Text> : null
                     )}
+
                     data={messages}
                     inverted
                     style={tw`pl-4`}
@@ -365,6 +403,7 @@ import * as ImagePicker from 'expo-image-picker';
                     containerStyle={{ flex: 1, borderBottomWidth: 0 }} placeholder='message ...' onChangeText={(text) => setMessage(text)} value={message} />
 
             </View>
+            </KeyboardAvoidingView>
         </>
     );
 }

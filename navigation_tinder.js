@@ -31,6 +31,7 @@ import PasswordResetScreen from './reset_password'
 import ResetPasswordCodeScreen from './reset_password_code'
 import ResetPasswordLastcreen from './reset_password_last'
 import Report from './Report';
+import Notification from './Notification';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,7 @@ export default function MyStack() {
           <Stack.Group>
             <Stack.Screen name="Profile" component={Tinder} />
             <Stack.Screen name="Chats" component={Dialog} />
+            <Stack.Screen name='Notification' component={Notification} />
             <Stack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
             <Stack.Screen name="FAQ" component={FAQ} />
             <Stack.Screen name="Likes" component={AutoTopTabs} options={({ navigation, route }) => ({
